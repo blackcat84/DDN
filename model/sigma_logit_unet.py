@@ -143,39 +143,6 @@ def get_encoder(name, in_channels=3, depth=5, weights=None, output_stride=32, **
     elif "VGG" in name.upper():
         from model.VGG import VGG16_C
         encoder = VGG16_C(pretrain="model/vgg16.pth")
-
-        encoders = {
-            "efficientnet-b7": {
-                "encoder": EfficientNetEncoder,
-                "pretrained_settings": _get_pretrained_settings("efficientnet-b7"),
-                "params": {
-                    "out_channels": (64, 48, 80, 224, 640),
-                    "stage_idxs": (11, 18, 38, 45),
-                    "model_name": "efficientnet-b7",
-                },
-            },
-            "efficientnet-b6": {
-                "encoder": EfficientNetEncoder,
-                "pretrained_settings": _get_pretrained_settings("efficientnet-b6"),
-                "params": {
-                    "out_channels": (56, 40, 72, 200, 576),
-                    "stage_idxs": (9, 15, 31, 55),
-                    "model_name": "efficientnet-b6",
-                },
-            },
-        }
-
-        Encoder = encoders[name]["encoder"]
-
-        params = encoders[name]["params"]
-        params.update(depth=depth)
-        encoder = Encoder(**params)
-
-        if weights is not None:
-            settings = encoders[name]["pretrained_settings"][weights]
-            encoder.load_state_dict(model_zoo.load_url(settings["url"]))
-
-        encoder.set_in_channels(in_channels, pretrained=weights is not None)
     else:
         raise Exception("uncorrect encoder")
     return encoder
