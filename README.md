@@ -40,7 +40,7 @@ pip install -r requirements.txt
 **BSDS500:** following the setting of [MuGE](https://github.com/ZhouCX117/UAED_MuGE),
 and the data can be download from [the link](https://drive.google.com/file/d/1iB2aUKTjDK0URbvUXbXBKBYAROftRKwX/view?usp=sharing)
 
-put the unzip the data to any path (such as "/data/users/liyachuan/dataset/BSDS")
+put the unziped data to any path (such as "/data/users/liyachuan/dataset/BSDS")
 
 And Change **data_pth** in config/BSDS-DDN_M36.yaml to **data_pth: /data/users/liyachuan/dataset/BSDS**
 
