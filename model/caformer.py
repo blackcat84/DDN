@@ -1316,89 +1316,8 @@ def caformer_s18_384_in21ft1k(pretrained=False, Dulbrn=0,**kwargs):
         dulbrn=Dulbrn,
         **kwargs)
     if pretrained:
-        state_dict = torch.load("model/caformer_s18_384_in21ft1k.pth",
-                                map_location="cpu")
-        model_dict = model.state_dict()
-        pretrained_dict = {k: v for k, v in state_dict.items() if k in model_dict}
-        model_dict.update(pretrained_dict)
-        model.load_state_dict(model_dict)
-    return model
-
-@register_model
-def caformer_s18_in21k(pretrained=False, **kwargs):
-    model = MetaFormer(
-        depths=[3, 3, 9, 3],
-        dims=[64, 128, 320, 512],
-        token_mixers=[SepConv, SepConv, Attention, Attention],
-        head_fn=MlpHead,
-        **kwargs)
-    model.default_cfg = default_cfgs['caformer_s18_in21k']
-    if pretrained:
-        state_dict = torch.hub.load_state_dict_from_url(
-            url=model.default_cfg['url'], map_location="cpu", check_hash=True)
-        model.load_state_dict(state_dict)
-    return model
-
-
-@register_model
-def caformer_s36(pretrained=False, **kwargs):
-    model = MetaFormer(
-        depths=[3, 12, 18, 3],
-        dims=[64, 128, 320, 512],
-        token_mixers=[SepConv, SepConv, Attention, Attention],
-        head_fn=MlpHead,
-        **kwargs)
-    model.default_cfg = default_cfgs['caformer_s36']
-    if pretrained:
-        state_dict = torch.hub.load_state_dict_from_url(
-            url=model.default_cfg['url'], map_location="cpu", check_hash=True)
-        model.load_state_dict(state_dict)
-    return model
-
-
-@register_model
-def caformer_s36_384(pretrained=False, **kwargs):
-    model = MetaFormer(
-        depths=[3, 12, 18, 3],
-        dims=[64, 128, 320, 512],
-        token_mixers=[SepConv, SepConv, Attention, Attention],
-        head_fn=MlpHead,
-        **kwargs)
-    model.default_cfg = default_cfgs['caformer_s36_384']
-    if pretrained:
-        state_dict = torch.hub.load_state_dict_from_url(
-            url=model.default_cfg['url'], map_location="cpu", check_hash=True)
-        model.load_state_dict(state_dict)
-    return model
-
-
-@register_model
-def caformer_s36_in21ft1k(pretrained=False, **kwargs):
-    model = MetaFormer(
-        depths=[3, 12, 18, 3],
-        dims=[64, 128, 320, 512],
-        token_mixers=[SepConv, SepConv, Attention, Attention],
-        head_fn=MlpHead,
-        **kwargs)
-    model.default_cfg = default_cfgs['caformer_s36_in21ft1k']
-    if pretrained:
-        state_dict = torch.hub.load_state_dict_from_url(
-            url=model.default_cfg['url'], map_location="cpu", check_hash=True)
-        model.load_state_dict(state_dict)
-    return model
-
-
-@register_model
-def caformer_s36_384_in21ft1k(pretrained=False, **kwargs):
-    model = MetaFormer(
-        depths=[3, 12, 18, 3],
-        dims=[64, 128, 320, 512],
-        token_mixers=[SepConv, SepConv, Attention, Attention],
-        head_fn=MlpHead,
-        **kwargs)
-    if pretrained:
-        state_dict = torch.load("model/caformer_s36_384_in21ft1k.pth",
-                                map_location="cpu")
+        ckpt = kwargs["cfg"]["ckpt"]["caformer_b36"]
+        state_dict = torch.load(ckpt, map_location="cpu",weights_only=True)
         model_dict = model.state_dict()
         pretrained_dict = {k: v for k, v in state_dict.items() if k in model_dict}
         model_dict.update(pretrained_dict)
@@ -1406,68 +1325,9 @@ def caformer_s36_384_in21ft1k(pretrained=False, **kwargs):
     return model
 
 
-@register_model
-def caformer_s36_in21k(pretrained=False, **kwargs):
-    model = MetaFormer(
-        depths=[3, 12, 18, 3],
-        dims=[64, 128, 320, 512],
-        token_mixers=[SepConv, SepConv, Attention, Attention],
-        head_fn=MlpHead,
-        **kwargs)
-    model.default_cfg = default_cfgs['caformer_s36_in21k']
-    if pretrained:
-        state_dict = torch.hub.load_state_dict_from_url(
-            url=model.default_cfg['url'], map_location="cpu", check_hash=True)
-        model.load_state_dict(state_dict)
-    return model
 
 
-@register_model
-def caformer_m36(pretrained=False, **kwargs):
-    model = MetaFormer(
-        depths=[3, 12, 18, 3],
-        dims=[96, 192, 384, 576],
-        token_mixers=[SepConv, SepConv, Attention, Attention],
-        head_fn=MlpHead,
-        **kwargs)
-    model.default_cfg = default_cfgs['caformer_m36']
-    if pretrained:
-        state_dict = torch.hub.load_state_dict_from_url(
-            url=model.default_cfg['url'], map_location="cpu", check_hash=True)
-        model.load_state_dict(state_dict)
-    return model
 
-
-@register_model
-def caformer_m36_384(pretrained=False, **kwargs):
-    model = MetaFormer(
-        depths=[3, 12, 18, 3],
-        dims=[96, 192, 384, 576],
-        token_mixers=[SepConv, SepConv, Attention, Attention],
-        head_fn=MlpHead,
-        **kwargs)
-    model.default_cfg = default_cfgs['caformer_m36_384']
-    if pretrained:
-        state_dict = torch.hub.load_state_dict_from_url(
-            url=model.default_cfg['url'], map_location="cpu", check_hash=True)
-        model.load_state_dict(state_dict)
-    return model
-
-
-@register_model
-def caformer_m36_in21ft1k(pretrained=False, **kwargs):
-    model = MetaFormer(
-        depths=[3, 12, 18, 3],
-        dims=[96, 192, 384, 576],
-        token_mixers=[SepConv, SepConv, Attention, Attention],
-        head_fn=MlpHead,
-        **kwargs)
-    model.default_cfg = default_cfgs['caformer_m36_in21ft1k']
-    if pretrained:
-        state_dict = torch.hub.load_state_dict_from_url(
-            url=model.default_cfg['url'], map_location="cpu", check_hash=True)
-        model.load_state_dict(state_dict)
-    return model
 
 
 @register_model
@@ -1480,8 +1340,8 @@ def caformer_m36_384_in21ft1k(pretrained=False, Dulbrn=0, **kwargs):
         dulbrn=Dulbrn,
         **kwargs)
     if pretrained:
-        state_dict = torch.load("model/caformer_m36_384_in21ft1k.pth",
-                                map_location="cpu")
+        ckpt = kwargs["cfg"]["ckpt"]["caformer_m36"]
+        state_dict = torch.load(ckpt, map_location="cpu",weights_only=True)
         model_dict = model.state_dict()
         pretrained_dict = {k: v for k, v in state_dict.items() if k in model_dict}
         model_dict.update(pretrained_dict)
@@ -1491,96 +1351,24 @@ def caformer_m36_384_in21ft1k(pretrained=False, Dulbrn=0, **kwargs):
 
 
 @register_model
-def caformer_m364_in21k(pretrained=False, **kwargs):
-    model = MetaFormer(
-        depths=[3, 12, 18, 3],
-        dims=[96, 192, 384, 576],
-        token_mixers=[SepConv, SepConv, Attention, Attention],
-        head_fn=MlpHead,
-        **kwargs)
-    model.default_cfg = default_cfgs['caformer_m364_in21k']
-    if pretrained:
-        state_dict = torch.hub.load_state_dict_from_url(
-            url=model.default_cfg['url'], map_location="cpu", check_hash=True)
-        model.load_state_dict(state_dict)
-    return model
-
-
-@register_model
-def caformer_b36(pretrained=False, **kwargs):
+def caformer_b36_384_in21ft1k(pretrained=False,Dulbrn=0, **kwargs):
     model = MetaFormer(
         depths=[3, 12, 18, 3],
         dims=[128, 256, 512, 768],
         token_mixers=[SepConv, SepConv, Attention, Attention],
         head_fn=MlpHead,
-        **kwargs)
-    model.default_cfg = default_cfgs['caformer_b36']
-    if pretrained:
-        state_dict = torch.hub.load_state_dict_from_url(
-            url=model.default_cfg['url'], map_location="cpu", check_hash=True)
-        model.load_state_dict(state_dict)
-    return model
-
-
-@register_model
-def caformer_b36_384(pretrained=False, **kwargs):
-    model = MetaFormer(
-        depths=[3, 12, 18, 3],
-        dims=[128, 256, 512, 768],
-        token_mixers=[SepConv, SepConv, Attention, Attention],
-        head_fn=MlpHead,
-        **kwargs)
-    model.default_cfg = default_cfgs['caformer_b36_384']
-    if pretrained:
-        state_dict = torch.hub.load_state_dict_from_url(
-            url=model.default_cfg['url'], map_location="cpu", check_hash=True)
-        model.load_state_dict(state_dict)
-    return model
-
-
-@register_model
-def caformer_b36_in21ft1k(pretrained=False, **kwargs):
-    model = MetaFormer(
-        depths=[3, 12, 18, 3],
-        dims=[128, 256, 512, 768],
-        token_mixers=[SepConv, SepConv, Attention, Attention],
-        head_fn=MlpHead,
-        **kwargs)
-    model.default_cfg = default_cfgs['caformer_b36_in21ft1k']
-    if pretrained:
-        state_dict = torch.hub.load_state_dict_from_url(
-            url=model.default_cfg['url'], map_location="cpu", check_hash=True)
-        model.load_state_dict(state_dict)
-    return model
-
-
-@register_model
-def caformer_b36_384_in21ft1k(pretrained=False, **kwargs):
-    model = MetaFormer(
-        depths=[3, 12, 18, 3],
-        dims=[128, 256, 512, 768],
-        token_mixers=[SepConv, SepConv, Attention, Attention],
-        head_fn=MlpHead,
+        dulbrn=Dulbrn,
         **kwargs)
     model.default_cfg = default_cfgs['caformer_b36_384_in21ft1k']
+
     if pretrained:
-        state_dict = torch.hub.load_state_dict_from_url(
-            url=model.default_cfg['url'], map_location="cpu", check_hash=True)
-        model.load_state_dict(state_dict)
+        ckpt = kwargs["cfg"]["ckpt"]["caformer_b36"]
+        state_dict = torch.load(ckpt, map_location="cpu",weights_only=True)
+        model_dict = model.state_dict()
+        pretrained_dict = {k: v for k, v in state_dict.items() if k in model_dict}
+        model_dict.update(pretrained_dict)
+        model.load_state_dict(model_dict)
+
     return model
 
 
-@register_model
-def caformer_b36_in21k(pretrained=False, **kwargs):
-    model = MetaFormer(
-        depths=[3, 12, 18, 3],
-        dims=[128, 256, 512, 768],
-        token_mixers=[SepConv, SepConv, Attention, Attention],
-        head_fn=MlpHead,
-        **kwargs)
-    model.default_cfg = default_cfgs['caformer_b36_in21k']
-    if pretrained:
-        state_dict = torch.hub.load_state_dict_from_url(
-            url=model.default_cfg['url'], map_location="cpu", check_hash=True)
-        model.load_state_dict(state_dict)
-    return model

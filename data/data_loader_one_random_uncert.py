@@ -10,6 +10,7 @@ import random
 from pathlib import Path
 from torch.nn.functional import interpolate
 from PIL import Image
+from data.nms import NMS_MODEL
 
 
 class PASCAL_Loader(data.Dataset):
@@ -120,11 +121,10 @@ class BSDS_Loader(data.Dataset):
             return img, img_name
 
 
-class BSDS_RCFLoader(data.Dataset):
+class BSDS_Loader(data.Dataset):
     """
     Dataloader BSDS500
     """
-
     def __init__(self, root='data/HED-BSDS_PASCAL', split='train', transform=False):
         self.root = root
         self.split = split
@@ -175,9 +175,8 @@ class BSDS_RCFLoader(data.Dataset):
             label = label[1:label.size(0), 1:label.size(1)]
             label = label.unsqueeze(0)
             label = label.float()
-          
             return img, label
-           
+
 
         else:
             img_name = Path(img_file).stem
@@ -192,16 +191,10 @@ class NYUD_Loader(data.Dataset):
     def __init__(self, root='data/HED-BSDS_PASCAL', split='train', transform=False, mode="RGB"):
         self.root = root
         self.split = split
-        #
-        # normalize = transforms.Normalize(mean=[0.485, 0.456, 0.406],
-        #                                  std=[0.229, 0.224, 0.225])
-        # self.transform = transforms.Compose([
-        #     transforms.ToTensor(),
-        #     normalize])
 
         if self.split == 'train':
             if mode == "RGB":
-                self.filelist = join(root, "image-train.lst")
+                self.filelist = join(root, "image-train-nearest.lst")
             else:
                 self.filelist = join(root, "hha-train.lst")
 
@@ -236,6 +229,13 @@ class NYUD_Loader(data.Dataset):
 
         if self.split == "train":
             label = transforms.ToTensor()(imageio.imread(join(self.root, lb_file), as_gray=True)) / 255
+
+            # if self.contains_values_in_open_interval(label):
+            #     with torch.no_grad():
+            #         label = self.nms_model(label.unsqueeze(0)).squeeze(0)
+            # label[label <= 0.2] = 0
+            # label[label >= 0.4] = 1
+            # label[(label > 0.2) & (label < 0.4)] = 2
             img, label = self.crop(img, label)
             # print(img.max(), img.min(), img.mean())
             return img, label
