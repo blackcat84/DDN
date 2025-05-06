@@ -40,7 +40,7 @@ from torch.distributions import Normal, Independent
 os.environ["CUDA_DEVICE_ORDER"] = "PCI_BUS_ID"  # see issue #152
 ### default args
 parser = argparse.ArgumentParser(description='PyTorch Training')
-parser.add_argument('--batch_size', default=None, type=int, metavar='BT',help='batch size')
+parser.add_argument('-b','--batch_size', default=None, type=int, metavar='BT',help='batch size')
 parser.add_argument('--LR', default=None, type=float, help='initial learning rate')
 parser.add_argument('--weight_decay', default=None, type=float, help='default weight decay')
 parser.add_argument('--stepsize', default=None, type=int,metavar='SS', help='learning rate step size')
