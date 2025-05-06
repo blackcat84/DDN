@@ -25,7 +25,7 @@ edge detection benchmarks, while the computational cost is similar to that of VG
 ### 4.1 Environmental preparation
 **Downloda the project**
 ```angular2html
-git@github.com:Li-yachuan/DDN.git
+git clone git@github.com:Li-yachuan/DDN.git
 ```
 **Install the requirement packages**
 Torch-related packages need to be installed manually.
