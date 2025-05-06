@@ -137,13 +137,13 @@ def get_encoder(args):
         encoder = caformer_s18_384_in21ft1k(pretrained=True)
     elif "DDN-M36" == name.upper():
         from model.caformer import caformer_m36_384_in21ft1k
-        encoder = caformer_m36_384_in21ft1k(pretrained=True, Dulbrn=16,cfg=args.cfg)
+        encoder = caformer_m36_384_in21ft1k(pretrained=True, Dulbrn=args.cfg.get("Dulbrn",16),cfg=args.cfg)
     elif "DDN-B36" == name.upper():
         from model.caformer import caformer_b36_384_in21ft1k
-        encoder = caformer_b36_384_in21ft1k(pretrained=True, Dulbrn=16,cfg=args.cfg)
+        encoder = caformer_b36_384_in21ft1k(pretrained=True, Dulbrn=args.cfg.get("Dulbrn",16),cfg=args.cfg)
     elif "DDN-S18" == name.upper():
         from model.caformer import caformer_s18_384_in21ft1k
-        encoder = caformer_s18_384_in21ft1k(pretrained=True, Dulbrn=16,cfg=args.cfg)
+        encoder = caformer_s18_384_in21ft1k(pretrained=True, Dulbrn=args.cfg.get("Dulbrn",16),cfg=args.cfg)
     elif "VGG" in name.upper():
         from model.VGG import VGG16_C
         encoder = VGG16_C(pretrain="model/vgg16.pth")
