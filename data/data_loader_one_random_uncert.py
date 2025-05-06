@@ -10,8 +10,6 @@ import random
 from pathlib import Path
 from torch.nn.functional import interpolate
 from PIL import Image
-from data.nms import NMS_MODEL
-
 
 class PASCAL_Loader(data.Dataset):
     """
@@ -62,65 +60,6 @@ class PASCAL_Loader(data.Dataset):
             return img, img_name
 
 
-# class BSDS_Loader(data.Dataset):
-#     """
-#     Dataloader BSDS500, mix label
-#     """
-#
-#     def __init__(self, root='data/HED-BSDS_PASCAL', split='train', transform=False, threshold=0.3):
-#         self.root = root
-#         self.split = split
-#         self.threshold = threshold
-#         self.transform = transform
-#         if self.split == 'train':
-#             self.filelist = os.path.join(root, "train_val_all.lst")
-#
-#         elif self.split == 'test':
-#             self.filelist = os.path.join(root, "test.lst")
-#         else:
-#             raise ValueError("Invalid split type!")
-#         with open(self.filelist, 'r') as f:
-#             self.filelist = f.readlines()
-#
-#     def __len__(self):
-#         return len(self.filelist)
-#
-#     def __getitem__(self, index):
-#         if self.split == "train":
-#             img_lb_file = self.filelist[index].strip("\n").split(" ")
-#             img_file = img_lb_file[0]
-#             label_list = []
-#             for i_label in range(1, len(img_lb_file)):
-#                 lb = scipy.io.loadmat(join(self.root, img_lb_file[i_label]))
-#                 lb = np.asarray(lb['edge_gt'])
-#                 label = torch.from_numpy(lb)
-#                 label = label[1:label.size(0), 1:label.size(1)]
-#                 label = label.float()
-#                 label_list.append(label.unsqueeze(0))
-#             labels = torch.cat(label_list, 0)
-#             lb = labels.mean(dim=0).unsqueeze(0)
-#
-#             # lb = lb[:, 1:lb.size(1), 1:lb.size(2)]
-#
-#             lb[lb >= self.threshold] = 1
-#             lb[(lb > 0) & (lb < self.threshold)] = 2
-#
-#             img = Image.open(join(self.root, img_file))
-#             img = transforms.ToTensor()(img)
-#             img = img[:, 1:img.size(1), 1:img.size(2)]
-#             return img, lb
-#
-#
-#         else:
-#             img_file = self.filelist[index].rstrip()
-#             img = Image.open(join(self.root, img_file))
-#             img = transforms.ToTensor()(img)
-#             img = img[:, 1:img.size(1), 1:img.size(2)]
-#
-#             img_name = Path(img_file).stem
-#             return img, img_name
-
-
 class BSDS_Loader(data.Dataset):
     """
     Dataloader BSDS500
@@ -145,17 +84,17 @@ class BSDS_Loader(data.Dataset):
         if self.split == "train":
             img_lb_file = self.filelist[index].strip("\n").split(" ")
             img_file = img_lb_file[0]
-            label_list = []
-            for i_label in range(1, len(img_lb_file)):
-                lb = scipy.io.loadmat(join(self.root, img_lb_file[i_label]))
-                lb = np.asarray(lb['edge_gt'])
-                label = torch.from_numpy(lb)
-                label = label[1:label.size(0), 1:label.size(1)]
-                label = label.float()
-                label_list.append(label.unsqueeze(0))
-            labels = torch.cat(label_list, 0)
-            lb_mean = labels.mean(dim=0).unsqueeze(0)
-            lb_std = labels.std(dim=0).unsqueeze(0)
+            # label_list = []
+            # for i_label in range(1, len(img_lb_file)):
+            #     lb = scipy.io.loadmat(join(self.root, img_lb_file[i_label]))
+            #     lb = np.asarray(lb['edge_gt'])
+            #     label = torch.from_numpy(lb)
+            #     label = label[1:label.size(0), 1:label.size(1)]
+            #     label = label.float()
+            #     label_list.append(label.unsqueeze(0))
+            # labels = torch.cat(label_list, 0)
+            # lb_mean = labels.mean(dim=0).unsqueeze(0)
+            # lb_std = labels.std(dim=0).unsqueeze(0)
             lb_index = random.randint(2, len(img_lb_file)) - 1
             lb_file = img_lb_file[lb_index]
 
