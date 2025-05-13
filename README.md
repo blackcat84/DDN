@@ -47,11 +47,13 @@ And Change **data_pth** in config/BSDS-DDN_M36.yaml to **data_pth: /data/users/l
 ### 4.3 Prepare pretrained ckpt
 The encoder of DDN is based on CAFormer, as a result, the ckpt of CAFormer have to be downloaded at first.
 
-CKPT of model B36 can be found (here)[https://huggingface.co/sail/dl/resolve/main/caformer/caformer_s18_384_in21ft1k.pth].
-CKPT of model M36 can be found here.
-CKPT of model S18 can be found here.
+CKPT of model B36 can be found [here](https://huggingface.co/sail/dl/resolve/main/caformer/caformer_s18_384_in21ft1k.pth).    
 
-More informatin can be found in the project of MetaFormer.
+CKPT of model M36 can be found [here](https://huggingface.co/sail/dl/resolve/main/caformer/caformer_m36_384_in21ft1k.pth).
+
+CKPT of model S18 can be found [here](https://huggingface.co/sail/dl/resolve/main/caformer/caformer_b36_384_in21ft1k.pth).
+
+More informatin can be found in [the project of MetaFormer](https://github.com/sail-sg/metaformer).
 
 Download the CKPT and replace the path in .yaml file in dir "./config"
 
@@ -122,6 +124,16 @@ The edges of these two datasets are in png format, which is different from the m
   author={Li, Yachuan and Pomab, Xavier Soria and Xi, Yongke and Li, Guanlin and Yang, Chaozhi and Xiao, Qian and Bai, Yun and LI, Zongmin},
   journal={arXiv preprint arXiv:2409.14976},
   year={2024}
+}
+```
+
+```
+@inproceedings{yu2022metaformer,
+  title={Metaformer is actually what you need for vision},
+  author={Yu, Weihao and Luo, Mi and Zhou, Pan and Si, Chenyang and Zhou, Yichen and Wang, Xinchao and Feng, Jiashi and Yan, Shuicheng},
+  booktitle={Proceedings of the IEEE/CVF conference on computer vision and pattern recognition},
+  pages={10819--10829},
+  year={2022}
 }
 ```
 
