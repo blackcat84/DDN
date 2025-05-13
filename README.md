@@ -44,21 +44,32 @@ put the unziped data to any path (such as "/data/users/liyachuan/dataset/BSDS")
 
 And Change **data_pth** in config/BSDS-DDN_M36.yaml to **data_pth: /data/users/liyachuan/dataset/BSDS**
 
-### Prepare pretrained ckpt
+### 4.3 Prepare pretrained ckpt
+The encoder of DDN is based on CAFormer, as a result, the ckpt of CAFormer have to be downloaded at first.
+
+CKPT of model B36 can be found (here)[https://huggingface.co/sail/dl/resolve/main/caformer/caformer_s18_384_in21ft1k.pth].
+CKPT of model M36 can be found here.
+CKPT of model S18 can be found here.
+
+More informatin can be found in the project of MetaFormer.
+
+Download the CKPT and replace the path in .yaml file in dir "./config"
 
 
-### 4.3 Training the model 
+
+
+### 4.4 Training the model 
 ```angular2html
 python main.py  --output 0501-bsds --cfg config/BSDS-DDN_M36.yaml
 ```
-### 4.4 Test
+### 4.5 Test
 ```angular2html
 python main.py  --output 0501-bsds-test --cfg config/BSDS-DDN_M36.yaml --mode test --resume [path of ckpt] --mg --ms
 ```
 **mg** means generating multi-granularity edges
 **ms** means generating multi-scale edges
 
-### 4.5 Eval
+### 4.6 Eval
 
 Following MuGE, the single-granularity evalution depend on the Matlab package.
 
@@ -68,7 +79,7 @@ python eval_muge_best/best_ods_ois.py [multi-granularity edges dir]
 ```
 more detail can be found in [MuGE](https://github.com/ZhouCX117/UAED_MuGE)
 
-### 4.6 Other datasets
+### 4.7 Other datasets
 **NYUDv2** following [RCF](https://github.com/yun-liu/RCF), and config the **data_pth** in file "config/NYUD-DDN_M36.yaml"  
 **BIPED** following [DexiNed](https://github.com/xavysp/DexiNed), and config the **data_pth** in file "config/BIPED-DDN_M36.yaml"
 
