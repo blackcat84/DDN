@@ -48,11 +48,11 @@ The test set can be downloaded from [the link](https://drive.google.com/file/d/1
 And put the unziped data dir "./test" to the subdir of dataset root path,  (such as "/data/users/liyachuan/dataset/BSDS/images")  
 
 BSDS
-  |_images
-      |\_ train
-      |\_test
-      |\_val
-
+  |_images  
+      |\_ train  
+      |\_test  
+      |\_val  
+  
 
 
 ### 4.3 Prepare pretrained ckpt
