@@ -46,7 +46,7 @@ And Change **data_pth** in config/BSDS-DDN_M36.yaml to **data_pth: /data/users/l
 
 The test set can be downloaded from [the link](https://drive.google.com/file/d/1WiO8-WIGApY6OrrCBEin0FjrgKudhlUo/view?usp=drive_link)
 And put the unziped data dir "./test" to the subdir of dataset root path,  (such as "/data/users/liyachuan/dataset/BSDS/images")  
-
+```text
 BSDS
   |_images  
       |\_ train  
@@ -58,7 +58,7 @@ BSDS/
     ├── test/  
     └── val/  
   
-
+```
 
 ### 4.3 Prepare pretrained ckpt
 The encoder of DDN is based on CAFormer, as a result, the ckpt of CAFormer have to be downloaded at first.
