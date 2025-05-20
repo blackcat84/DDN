@@ -52,11 +52,11 @@ BSDS
       |\_ train  
       |\_test  
       |\_val  
-BSDS/
-└── images/
-    ├── train/
-    ├── test/
-    └── val/
+BSDS/  
+└── images/  
+    ├── train/  
+    ├── test/  
+    └── val/  
   
 
 
