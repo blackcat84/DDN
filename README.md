@@ -38,11 +38,22 @@ pip install -r requirements.txt
 ### 4.2 Prepare dataset
 
 **BSDS500:** following the setting of [MuGE](https://github.com/ZhouCX117/UAED_MuGE),
-and the data can be download from [the link](https://drive.google.com/file/d/1iB2aUKTjDK0URbvUXbXBKBYAROftRKwX/view?usp=sharing)
+and the data can be downloaded from [the link](https://drive.google.com/file/d/1iB2aUKTjDK0URbvUXbXBKBYAROftRKwX/view?usp=sharing)
 
 put the unziped data to any path (such as "/data/users/liyachuan/dataset/BSDS")
 
 And Change **data_pth** in config/BSDS-DDN_M36.yaml to **data_pth: /data/users/liyachuan/dataset/BSDS**
+
+The test set can be downloaded from [the link](https://drive.google.com/file/d/1WiO8-WIGApY6OrrCBEin0FjrgKudhlUo/view?usp=drive_link)
+And put the unziped data dir "./test" to the subdir of dataset root path,  (such as "/data/users/liyachuan/dataset/BSDS/images")  
+
+BSDS
+  |_images
+      |\_ train
+      |\_test
+      |\_val
+
+
 
 ### 4.3 Prepare pretrained ckpt
 The encoder of DDN is based on CAFormer, as a result, the ckpt of CAFormer have to be downloaded at first.
