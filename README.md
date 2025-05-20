@@ -49,15 +49,9 @@ And put the unziped data dir "./test" to the subdir of dataset root path,  (such
 ```text
 BSDS
   |_images  
-      |\_ train  
-      |\_test  
-      |\_val  
-BSDS/  
-└── images/  
-    ├── train/  
-    ├── test/  
-    └── val/  
-  
+      |_train  
+      |_test  
+      |_val
 ```
 
 ### 4.3 Prepare pretrained ckpt
