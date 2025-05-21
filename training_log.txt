@@ -1,0 +1,78 @@
+MODEL SIZE: 41.266722
+0 1e-05
+Epoch: [0/7][0/7500] Time 2.42 (avg:2.42) Loss 14795.58 (avg:14795.58) bce_loss:14022.81 kl_reg_loss:77277.58
+Epoch: [0/7][937/7500] Time 0.22 (avg:0.23) Loss 20451.84 (avg:16893.59) bce_loss:18169.41 kl_reg_loss:228243.22
+Epoch: [0/7][1874/7500] Time 0.24 (avg:0.23) Loss 13443.52 (avg:16776.96) bce_loss:11278.00 kl_reg_loss:216551.66
+Epoch: [0/7][2811/7500] Time 0.22 (avg:0.23) Loss 17150.72 (avg:16692.98) bce_loss:15114.78 kl_reg_loss:203593.91
+Epoch: [0/7][3748/7500] Time 0.23 (avg:0.23) Loss 13914.94 (avg:16578.05) bce_loss:11706.42 kl_reg_loss:220851.77
+Epoch: [0/7][4685/7500] Time 0.22 (avg:0.23) Loss 13230.86 (avg:16473.77) bce_loss:11118.32 kl_reg_loss:211253.83
+Epoch: [0/7][5622/7500] Time 0.22 (avg:0.23) Loss 12706.99 (avg:16405.94) bce_loss:10317.82 kl_reg_loss:238916.70
+Epoch: [0/7][6559/7500] Time 0.22 (avg:0.22) Loss 20644.21 (avg:16336.56) bce_loss:18249.36 kl_reg_loss:239485.81
+Epoch: [0/7][7496/7500] Time 0.22 (avg:0.22) Loss 14666.25 (avg:16313.58) bce_loss:12458.95 kl_reg_loss:220730.91
+/home-local/liyachuan/CODE/DDN/0430-bsds/epoch-0-testing-record-view
+1 1e-05
+Epoch: [1/7][0/7500] Time 0.26 (avg:0.26) Loss 17183.15 (avg:17183.15) bce_loss:14949.71 kl_reg_loss:223344.47
+Epoch: [1/7][937/7500] Time 0.22 (avg:0.22) Loss 11383.25 (avg:15888.45) bce_loss:9253.50 kl_reg_loss:212974.52
+Epoch: [1/7][1874/7500] Time 0.22 (avg:0.22) Loss 17753.84 (avg:15918.76) bce_loss:15425.84 kl_reg_loss:232800.25
+Epoch: [1/7][2811/7500] Time 0.22 (avg:0.22) Loss 14655.75 (avg:15899.74) bce_loss:12175.96 kl_reg_loss:247979.22
+Epoch: [1/7][3748/7500] Time 0.22 (avg:0.22) Loss 9715.06 (avg:15867.43) bce_loss:7423.77 kl_reg_loss:229128.78
+Epoch: [1/7][4685/7500] Time 0.22 (avg:0.22) Loss 13358.83 (avg:15850.43) bce_loss:11223.11 kl_reg_loss:213571.75
+Epoch: [1/7][5622/7500] Time 0.22 (avg:0.22) Loss 18899.88 (avg:15846.02) bce_loss:16341.89 kl_reg_loss:255798.70
+Epoch: [1/7][6559/7500] Time 0.22 (avg:0.22) Loss 14063.42 (avg:15802.68) bce_loss:11789.21 kl_reg_loss:227420.47
+Epoch: [1/7][7496/7500] Time 0.22 (avg:0.22) Loss 22524.48 (avg:15786.76) bce_loss:19794.67 kl_reg_loss:272981.09
+/home-local/liyachuan/CODE/DDN/0430-bsds/epoch-1-testing-record-view
+2 1e-05
+Epoch: [2/7][0/7500] Time 0.26 (avg:0.26) Loss 11399.03 (avg:11399.03) bce_loss:9308.08 kl_reg_loss:209095.19
+Epoch: [2/7][937/7500] Time 0.22 (avg:0.22) Loss 19056.00 (avg:15543.46) bce_loss:16231.62 kl_reg_loss:282437.72
+Epoch: [2/7][1874/7500] Time 0.22 (avg:0.22) Loss 18366.19 (avg:15596.06) bce_loss:15695.28 kl_reg_loss:267090.97
+Epoch: [2/7][2811/7500] Time 0.22 (avg:0.22) Loss 17162.73 (avg:15630.70) bce_loss:14640.24 kl_reg_loss:252248.72
+Epoch: [2/7][3748/7500] Time 0.22 (avg:0.22) Loss 12268.70 (avg:15553.70) bce_loss:10016.34 kl_reg_loss:225236.06
+Epoch: [2/7][4685/7500] Time 0.22 (avg:0.22) Loss 15971.49 (avg:15572.10) bce_loss:13698.34 kl_reg_loss:227314.28
+Epoch: [2/7][5622/7500] Time 0.22 (avg:0.22) Loss 10603.15 (avg:15540.76) bce_loss:8570.54 kl_reg_loss:203260.62
+Epoch: [2/7][6559/7500] Time 0.22 (avg:0.22) Loss 15218.51 (avg:15541.67) bce_loss:12678.96 kl_reg_loss:253954.75
+Epoch: [2/7][7496/7500] Time 0.22 (avg:0.22) Loss 12594.33 (avg:15533.37) bce_loss:10407.97 kl_reg_loss:218636.19
+/home-local/liyachuan/CODE/DDN/0430-bsds/epoch-2-testing-record-view
+3 1.0000000000000002e-06
+Epoch: [3/7][0/7500] Time 0.26 (avg:0.26) Loss 18601.32 (avg:18601.32) bce_loss:16055.00 kl_reg_loss:254632.09
+Epoch: [3/7][937/7500] Time 0.22 (avg:0.22) Loss 18036.04 (avg:15327.66) bce_loss:15171.38 kl_reg_loss:286465.69
+Epoch: [3/7][1874/7500] Time 0.22 (avg:0.22) Loss 9150.76 (avg:15320.82) bce_loss:7429.09 kl_reg_loss:172166.80
+Epoch: [3/7][2811/7500] Time 0.22 (avg:0.22) Loss 10833.51 (avg:15345.39) bce_loss:8123.01 kl_reg_loss:271049.59
+Epoch: [3/7][3748/7500] Time 0.22 (avg:0.22) Loss 11620.64 (avg:15340.59) bce_loss:9227.99 kl_reg_loss:239265.23
+Epoch: [3/7][4685/7500] Time 0.22 (avg:0.22) Loss 14566.28 (avg:15350.61) bce_loss:12227.43 kl_reg_loss:233884.44
+Epoch: [3/7][5622/7500] Time 0.22 (avg:0.22) Loss 20162.40 (avg:15317.73) bce_loss:17767.64 kl_reg_loss:239476.22
+Epoch: [3/7][6559/7500] Time 0.22 (avg:0.22) Loss 12748.03 (avg:15295.11) bce_loss:10756.32 kl_reg_loss:199170.31
+Epoch: [3/7][7496/7500] Time 0.22 (avg:0.22) Loss 12333.16 (avg:15289.58) bce_loss:10238.88 kl_reg_loss:209428.08
+/home-local/liyachuan/CODE/DDN/0430-bsds/epoch-3-testing-record-view
+4 1.0000000000000002e-06
+Epoch: [4/7][0/7500] Time 0.26 (avg:0.26) Loss 26515.91 (avg:26515.91) bce_loss:24005.84 kl_reg_loss:251007.06
+Epoch: [4/7][937/7500] Time 0.22 (avg:0.22) Loss 12715.93 (avg:15210.71) bce_loss:10571.65 kl_reg_loss:214427.56
+Epoch: [4/7][1874/7500] Time 0.22 (avg:0.22) Loss 18462.35 (avg:15191.30) bce_loss:15794.36 kl_reg_loss:266799.44
+Epoch: [4/7][2811/7500] Time 0.22 (avg:0.22) Loss 13652.78 (avg:15221.55) bce_loss:11411.87 kl_reg_loss:224090.88
+Epoch: [4/7][3748/7500] Time 0.22 (avg:0.22) Loss 14866.62 (avg:15215.27) bce_loss:12223.49 kl_reg_loss:264312.53
+Epoch: [4/7][4685/7500] Time 0.22 (avg:0.22) Loss 14194.61 (avg:15232.08) bce_loss:11755.61 kl_reg_loss:243900.23
+Epoch: [4/7][5622/7500] Time 0.22 (avg:0.22) Loss 12230.82 (avg:15181.18) bce_loss:10077.46 kl_reg_loss:215336.20
+Epoch: [4/7][6559/7500] Time 0.22 (avg:0.22) Loss 13535.89 (avg:15207.75) bce_loss:10805.23 kl_reg_loss:273065.88
+Epoch: [4/7][7496/7500] Time 0.22 (avg:0.22) Loss 12077.24 (avg:15211.23) bce_loss:9836.64 kl_reg_loss:224060.16
+/home-local/liyachuan/CODE/DDN/0430-bsds/epoch-4-testing-record-view
+5 1.0000000000000002e-06
+Epoch: [5/7][0/7500] Time 0.26 (avg:0.26) Loss 15646.57 (avg:15646.57) bce_loss:13884.14 kl_reg_loss:176242.06
+Epoch: [5/7][937/7500] Time 0.22 (avg:0.22) Loss 14973.54 (avg:15189.41) bce_loss:12270.81 kl_reg_loss:270272.88
+Epoch: [5/7][1874/7500] Time 0.22 (avg:0.22) Loss 12764.49 (avg:15175.60) bce_loss:10452.85 kl_reg_loss:231164.38
+Epoch: [5/7][2811/7500] Time 0.22 (avg:0.22) Loss 10421.15 (avg:15216.01) bce_loss:8419.62 kl_reg_loss:200153.52
+Epoch: [5/7][3748/7500] Time 0.22 (avg:0.22) Loss 14385.18 (avg:15192.32) bce_loss:12018.05 kl_reg_loss:236712.69
+Epoch: [5/7][4685/7500] Time 0.22 (avg:0.22) Loss 18304.12 (avg:15209.11) bce_loss:15561.28 kl_reg_loss:274285.06
+Epoch: [5/7][5622/7500] Time 0.22 (avg:0.22) Loss 18737.60 (avg:15247.25) bce_loss:15886.90 kl_reg_loss:285070.00
+Epoch: [5/7][6559/7500] Time 0.22 (avg:0.22) Loss 13379.69 (avg:15255.63) bce_loss:11333.93 kl_reg_loss:204575.50
+Epoch: [5/7][7496/7500] Time 0.22 (avg:0.22) Loss 14896.79 (avg:15260.80) bce_loss:12086.27 kl_reg_loss:281052.31
+/home-local/liyachuan/CODE/DDN/0430-bsds/epoch-5-testing-record-view
+6 1.0000000000000002e-07
+Epoch: [6/7][0/7500] Time 0.26 (avg:0.26) Loss 10656.14 (avg:10656.14) bce_loss:8652.59 kl_reg_loss:200355.03
+Epoch: [6/7][937/7500] Time 0.22 (avg:0.22) Loss 12151.51 (avg:15121.49) bce_loss:9861.43 kl_reg_loss:229007.97
+Epoch: [6/7][1874/7500] Time 0.22 (avg:0.22) Loss 11069.74 (avg:15221.57) bce_loss:9248.87 kl_reg_loss:182087.14
+Epoch: [6/7][2811/7500] Time 0.22 (avg:0.22) Loss 13500.41 (avg:15149.99) bce_loss:11018.69 kl_reg_loss:248172.03
+Epoch: [6/7][3748/7500] Time 0.22 (avg:0.22) Loss 17282.12 (avg:15153.45) bce_loss:14993.16 kl_reg_loss:228896.39
+Epoch: [6/7][4685/7500] Time 0.23 (avg:0.22) Loss 9021.01 (avg:15202.18) bce_loss:6973.20 kl_reg_loss:204780.92
+Epoch: [6/7][5622/7500] Time 0.22 (avg:0.22) Loss 20791.49 (avg:15208.48) bce_loss:17687.95 kl_reg_loss:310353.75
+Epoch: [6/7][6559/7500] Time 0.23 (avg:0.22) Loss 16717.11 (avg:15201.53) bce_loss:14201.86 kl_reg_loss:251524.56
+Epoch: [6/7][7496/7500] Time 0.23 (avg:0.22) Loss 14255.50 (avg:15226.26) bce_loss:11612.09 kl_reg_loss:264340.88
+/home-local/liyachuan/CODE/DDN/0430-bsds/epoch-6-testing-record-view
