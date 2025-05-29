@@ -87,9 +87,9 @@ Following MuGE, the single-granularity evalution depend on the Matlab package.
 
 And the multi-granularity edges evalution by the commond
 ```angular2html
-python eval_muge_best/best_ods_ois.py [multi-granularity edges dir]
+python eval_muge_best/best_ods_ois_full.py [single-granularity edge dirs]
 ```
-more detail can be found in [MuGE](https://github.com/ZhouCX117/UAED_MuGE)
+more detail can be found [here](eval_muge_best/README.md) and [MuGE](https://github.com/ZhouCX117/UAED_MuGE)
 
 ### 4.7 Other datasets
 **NYUDv2** following [RCF](https://github.com/yun-liu/RCF), and config the **data_pth** in file "config/NYUD-DDN_M36.yaml"  
