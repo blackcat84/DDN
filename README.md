@@ -75,6 +75,11 @@ Download the CKPT and replace the path in .yaml file in dir "./config"
 python main.py  --output 0501-bsds --cfg config/BSDS-DDN_M36.yaml
 ```
 ### 4.5 Test
+
+The pretrained can be found [here](https://drive.google.com/file/d/1RMIksmpAmRgccwxzzFIoZbs7203u8Q4l/view?usp=drive_link)
+This ckpt is the result I reproduced on different devices (ODS=0.840), which is 0.1% lower than the accuracy reported in the paper (ODS=0.841). I think this kind of error is acceptable
+If you merely hope to test the effectiveness of the algorithm or apply it to other tasks, Training Model can be ignored. Use the ckpt I provided directly for reasoning.
+
 ```angular2html
 python main.py  --output 0501-bsds-test --cfg config/BSDS-DDN_M36.yaml --mode test --resume [path of ckpt] --mg --ms
 ```
