@@ -328,7 +328,12 @@ def test(model, test_loader, epoch, save_dir, mg=False):
             result_png.save(join(png_save_dir, "%s.png" % filename))
             io.savemat(join(mat_save_dir, "%s.mat" % filename), {'result': result}, do_compression=True)
         else:
+<<<<<<< HEAD
             for granu in [-5,-4.5,-4,-3.5,-3, -2.5, -2, -1.5, -1,-0.5, 0]:
+=======
+            # for granu in [0, 1, 1.5, 2, 2.5, 3]:
+            for granu in ["-5.0","-4.5","-4.0","-3.5","-3.0","-2.5","-2.0","-1.5","-1.0","-0.5","0.0"]:
+>>>>>>> effa9c2743fa931614bbb805584fcc6f20bbc85a
 
                 outputs = torch.sigmoid(mean + std * granu)
                 outputs = (outputs - outputs.min()) / (outputs.max() - outputs.min())
@@ -401,7 +406,11 @@ def multiscale_test_mg(model, test_loader, epoch, save_dir):
         os.makedirs(save_dir)
     # scale = [0.6, 1, 1.6]
     scale = [0.5, 0.75, 1.0, 1.25, 1.5, 1.75]
+<<<<<<< HEAD
     granus = [-5,-4.5,-4,-3.5,-3, -2.5, -2, -1.5, -1,-0.5, 0]
+=======
+    granus = ["-5.0","-4.5","-4.0","-3.5","-3.0","-2.5","-2.0","-1.5","-1.0","-0.5","0.0"]
+>>>>>>> effa9c2743fa931614bbb805584fcc6f20bbc85a
 
     for idx, (image, filename) in enumerate(tqdm(test_loader)):
         image = image[0]
