@@ -64,7 +64,7 @@ python main.py  --output bsds-test --cfg config/BSDS-DDN_M36.yaml --mode test --
 **mg** means generating multi-granularity edges
 **ms** means generating multi-scale edges
 
-The pretrained ckpt of DDN is here, if you donot want to train DDN, you can test the ckpt directly.
+The pretrained ckpt of DDN is [here](https://drive.google.com/file/d/1RMIksmpAmRgccwxzzFIoZbs7203u8Q4l/view?usp=sharing), if you donot want to train DDN, you can test the ckpt directly.
 
 ### 4.5 Eval
 
