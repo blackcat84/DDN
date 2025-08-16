@@ -23,7 +23,7 @@ edge detection benchmarks, while the computational cost is similar to that of VG
 ## 4. Production
 
 ### 4.1 Environmental preparation
-**Downloda the project**
+**Download the project**
 ```angular2html
 git clone git@github.com:Li-yachuan/DDN.git
 ```
