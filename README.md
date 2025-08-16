@@ -50,20 +50,21 @@ DDN-M36 is based on caformer_m36, and the ckpt can be found [here](https://huggi
 DDN-S18 is based on caformer_s18, and the ckpt can be found [here](https://huggingface.co/sail/dl/resolve/main/caformer/caformer_s18_384_in21ft1k.pth)  
 DDN-B36 is based on caformer_b36, and the ckpt can be found [here](https://huggingface.co/sail/dl/resolve/main/caformer/caformer_b36_384_in21ft1k.pth)
 
-Download the ckpt and link it in the config file 'config/BSDS-DDN_M36.yaml'(or the other config file you used) **ckpt:**
-
+Download the ckpt and link it in the config file 'config/BSDS-DDN_M36.yaml'(or the other config file you used) **ckpt**.
 
 
 ### 4.3 Training the model 
 ```angular2html
-python main.py  --output 0501-bsds --cfg config/BSDS-DDN_M36.yaml
+python main.py  --output bsds --cfg config/BSDS-DDN_M36.yaml
 ```
 ### 4.4 Test
 ```angular2html
-python main.py  --output 0501-bsds-test --cfg config/BSDS-DDN_M36.yaml --mode test --resume [path of ckpt] --mg --ms
+python main.py  --output bsds-test --cfg config/BSDS-DDN_M36.yaml --mode test --resume [path of ckpt] --mg --ms
 ```
 **mg** means generating multi-granularity edges
 **ms** means generating multi-scale edges
+
+The pretrained ckpt of DDN is here, if you donot want to train DDN, you can test the ckpt directly.
 
 ### 4.5 Eval
 
