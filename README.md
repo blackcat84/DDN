@@ -44,7 +44,14 @@ put the unziped data to any path (such as "/data/users/liyachuan/dataset/BSDS")
 
 And Change **data_pth** in config/BSDS-DDN_M36.yaml to **data_pth: /data/users/liyachuan/dataset/BSDS**
 
-### Prepare pretrained ckpt
+### 4.3 Prepare pretrained ckpt
+DDN uses the pretrained [CAformer](https://github.com/sail-sg/metaformer) as the backbone, so the ckpt of CAformer have to be download before train DDN.  
+DDN-M36 is based on caformer_m36, and the ckpt can be found [here](https://huggingface.co/sail/dl/resolve/main/caformer/caformer_m36_384_in21ft1k.pth)  
+DDN-S18 is based on caformer_s18, and the ckpt can be found [here](https://huggingface.co/sail/dl/resolve/main/caformer/caformer_s18_384_in21ft1k.pth)  
+DDN-B36 is based on caformer_b36, and the ckpt can be found [here](https://huggingface.co/sail/dl/resolve/main/caformer/caformer_b36_384_in21ft1k.pth)
+
+Download the ckpt and link it in the config file 'config/BSDS-DDN_M36.yaml'(or the other config file you used) **ckpt:**
+
 
 
 ### 4.3 Training the model 
