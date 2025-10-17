@@ -1,15 +1,15 @@
 data_pth: ./
 ckpt:
-  caformer_s18: ./caformer_s18_384_in21ft1k.pth
-  caformer_m36: ./caformer_m36_384_in21ft1k.pth
-  caformer_b36: ./caformer_b36_384_in21ft1k.pth
+  caformer_s18: ./caformer/caformer_s18_384_in21ft1k.pth
+  caformer_m36: ./caformer/caformer_m36_384_in21ft1k.pth
+  caformer_b36: ./caformer/caformer_b36_384_in21ft1k.pth
 
 
 train_cfg:
   stepsize: 3
   maxepoch: 50
   gpu: "0"
-  output: BSDS-DDN_M36-train
+  output: Finder-train
   dataset: Finder
   encoder: DDN-M36
   batch_size: 16

@@ -19,8 +19,8 @@ import torchvision
 import matplotlib
 from tqdm import tqdm
 
-from data.data_loader_one_random_uncert import  BIPED_Loader,BIPEDv2_Loader, NYUD_Loader, \
-    BSDS_Loader, PASCAL_Loader
+from data.data_loader_one_random_uncert import  BIPED_Loader, NYUD_Loader, \
+    BSDS_Loader, PASCAL_Loader #,BIPEDv2_Loader
 
 from torch.utils.data import DataLoader
 from utils import Logger, Averagvalue, save_checkpoint
@@ -122,10 +122,27 @@ def main():
     elif args.dataset == "BIPED":
         train_dataset = BIPED_Loader(root=args.cfg["data_pth"], split="train")
         test_dataset = BIPED_Loader(root=args.cfg["data_pth"], split="test")
-    elif args.dataset == "BIPEDv2":
-        train_dataset = BIPEDv2_Loader(root=args.cfg["data_pth"], split="train")
-        test_dataset = BIPEDv2_Loader(root=args.cfg["data_pth"], split="test")
+    ###elif args.dataset == "BIPEDv2":
+    ###    train_dataset = BIPEDv2_Loader(root=args.cfg["data_pth"], split="train")
+    ###    test_dataset = BIPEDv2_Loader(root=args.cfg["data_pth"], split="test")
+    
+    ###
+    elif args.dataset == "Finder":
+        sys.path.append(os.path.abspath('../phase_discontinuities_detection'))
+        from data_utils import utils
+        from data_utils.dataloader import EdgeDataset
 
+        #train_data_path = "/home/andrea/Desktop/phase_discontinuities_detection/data/first_dates_train_val/v1/first_dataset/256_128_0/train"
+        #val_data_path = "/home/andrea/Desktop/phase_discontinuities_detection/data/first_dates_train_val/v1/first_dataset/256_128_0/val"
+        train_data_path = "/home/agatto/andrea/phase_discontinuities_detection/data/first_dates_train_val/v1/first_dataset/256_128_0/train"
+        val_data_path = "/home/agatto/andrea/phase_discontinuities_detection/data/first_dates_train_val/v1/first_dataset/256_128_0/val"
+
+        train_data = utils.load_data_from_numpy(train_data_path)
+        val_data = utils.load_data_from_numpy(val_data_path)
+        train_dataset = EdgeDataset(train_data)
+        test_dataset = EdgeDataset(val_data)
+
+    ###
 
     else:
         raise Exception("error dataset")
@@ -228,10 +245,16 @@ def train(train_loader, model, optimizer, epoch, save_dir, args):
     counter = 0
 
     for index_dataloader, data in enumerate(train_loader):
-        if len(data) == 4:
+        
+        ###
+        tensors_to_concatenate = [data[key] for key in ["amplitude", "wphases", "edges"]]
+        image = torch.cat(tensors_to_concatenate, dim=1)
+        label = data["edges"]
+        '''if len(data) == 4:
             (image, label, label_mean, label_std) = data
         else:
-            (image, label) = data
+            (image, label) = data'''
+        ###
         # measure data loading time
         data_time.update(time.time() - end)
         image, label = image.cuda(), label.cuda()
@@ -264,12 +287,22 @@ def train(train_loader, model, optimizer, epoch, save_dir, args):
         if not isdir(save_dir):
             os.makedirs(save_dir)
 
-        if index_dataloader % (len(train_loader) // args.print_freq) == 0:
-            info = 'Epoch: [{0}/{1}][{2}/{3}] '.format(epoch, args.maxepoch, index_dataloader, len(train_loader)) + \
+        ###
+        info = 'Epoch: [{0}/{1}][{2}/{3}] '.format(epoch, args.maxepoch, index_dataloader, len(train_loader)) + \
                    'Time {batch_time.val:.2f} (avg:{batch_time.avg:.2f}) '.format(batch_time=batch_time) + \
                    'Loss {loss.val:.2f} (avg:{loss.avg:.2f}) '.format(loss=losses) + \
                    "bce_loss:{:.2f} kl_reg_loss:{:.2f}".format(bce_loss.item(), kl_reg_loss.item())
-            print(info)
+        print(info)
+        ###
+
+        if index_dataloader % (len(train_loader) // args.print_freq) == 0:
+            ###
+            '''info = 'Epoch: [{0}/{1}][{2}/{3}] '.format(epoch, args.maxepoch, index_dataloader, len(train_loader)) + \
+                   'Time {batch_time.val:.2f} (avg:{batch_time.avg:.2f}) '.format(batch_time=batch_time) + \
+                   'Loss {loss.val:.2f} (avg:{loss.avg:.2f}) '.format(loss=losses) + \
+                   "bce_loss:{:.2f} kl_reg_loss:{:.2f}".format(bce_loss.item(), kl_reg_loss.item())
+            print(info)'''
+            ####
             _, _, H, W = outputs.shape
 
             torchvision.utils.save_image(outputs,
@@ -298,8 +331,18 @@ def test(model, test_loader, epoch, save_dir, mg=False):
     model.eval()
     if not isdir(save_dir):
         os.makedirs(save_dir)
-    for idx, (image, filename) in enumerate(tqdm(test_loader)):
+    
+    ###for idx, (image, filename) in enumerate(tqdm(test_loader)):
+    for idx, data in enumerate(tqdm(test_loader)):
+        ###
+        tensors_to_concatenate = [data[key] for key in ["amplitude", "wphases", "edges"]]
+        image = torch.cat(tensors_to_concatenate, dim=1)
+        label = data["edges"]
+        filename = "out_"+str(idx)
+        ###
+
         image = image.cuda()
+        
         with torch.no_grad():
             mean, std = model(image)
 
@@ -318,15 +361,15 @@ def test(model, test_loader, epoch, save_dir, mg=False):
             result_png = Image.fromarray((result * 255).astype(np.uint8))
 
             png_save_dir = os.path.join(save_dir, "png")
-            mat_save_dir = os.path.join(save_dir, "mat")
+            ###mat_save_dir = os.path.join(save_dir, "mat")
 
             if not os.path.exists(png_save_dir):
                 os.makedirs(png_save_dir)
 
-            if not os.path.exists(mat_save_dir):
-                os.makedirs(mat_save_dir)
+            ###if not os.path.exists(mat_save_dir):
+            ###    os.makedirs(mat_save_dir)
             result_png.save(join(png_save_dir, "%s.png" % filename))
-            io.savemat(join(mat_save_dir, "%s.mat" % filename), {'result': result}, do_compression=True)
+            ###io.savemat(join(mat_save_dir, "%s.mat" % filename), {'result': result}, do_compression=True)
         else:
             for granu in [-5,-4.5,-4,-3.5,-3, -2.5, -2, -1.5, -1,-0.5, 0]:
 
@@ -339,15 +382,15 @@ def test(model, test_loader, epoch, save_dir, mg=False):
                 result_png = Image.fromarray((result * 255).astype(np.uint8))
 
                 png_save_dir = os.path.join(save_dir, str(granu), "png")
-                mat_save_dir = os.path.join(save_dir, str(granu), "mat")
+                ###mat_save_dir = os.path.join(save_dir, str(granu), "mat")
 
                 if not os.path.exists(png_save_dir):
                     os.makedirs(png_save_dir)
 
-                if not os.path.exists(mat_save_dir):
-                    os.makedirs(mat_save_dir)
+                ###if not os.path.exists(mat_save_dir):
+                ###    os.makedirs(mat_save_dir)
                 result_png.save(join(png_save_dir, "%s.png" % filename))
-                io.savemat(join(mat_save_dir, "%s.mat" % filename), {'result': result}, do_compression=True)
+                ###io.savemat(join(mat_save_dir, "%s.mat" % filename), {'result': result}, do_compression=True)
 
 
 def multiscale_test(model, test_loader, epoch, save_dir):
@@ -384,15 +427,15 @@ def multiscale_test(model, test_loader, epoch, save_dir):
         result_png = Image.fromarray((result * 255).astype(np.uint8))
 
         png_save_dir = os.path.join(save_dir, "png")
-        mat_save_dir = os.path.join(save_dir, "mat")
+        ###mat_save_dir = os.path.join(save_dir, "mat")
 
         if not os.path.exists(png_save_dir):
             os.makedirs(png_save_dir)
 
-        if not os.path.exists(mat_save_dir):
-            os.makedirs(mat_save_dir)
+        ###if not os.path.exists(mat_save_dir):
+        ###    os.makedirs(mat_save_dir)
         result_png.save(join(png_save_dir, "%s.png" % filename))
-        io.savemat(join(mat_save_dir, "%s.mat" % filename), {'result': result}, do_compression=True)
+        ###io.savemat(join(mat_save_dir, "%s.mat" % filename), {'result': result}, do_compression=True)
 
 
 def multiscale_test_mg(model, test_loader, epoch, save_dir):
@@ -442,7 +485,7 @@ def multiscale_test_mg(model, test_loader, epoch, save_dir):
             result_png = Image.fromarray((result * 255).astype(np.uint8))
 
             png_save_dir = os.path.join(granu_dir, "png")
-            mat_save_dir = os.path.join(granu_dir, "mat")
+            ###mat_save_dir = os.path.join(granu_dir, "mat")
 
             if not os.path.exists(png_save_dir):
                 os.makedirs(png_save_dir)
@@ -450,7 +493,7 @@ def multiscale_test_mg(model, test_loader, epoch, save_dir):
             if not os.path.exists(mat_save_dir):
                 os.makedirs(mat_save_dir)
             result_png.save(join(png_save_dir, "%s.png" % filename))
-            io.savemat(join(mat_save_dir, "%s.mat" % filename), {'result': result}, do_compression=True)
+            ###io.savemat(join(mat_save_dir, "%s.mat" % filename), {'result': result}, do_compression=True)
 
 
 if __name__ == '__main__':
