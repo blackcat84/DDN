@@ -12,7 +12,7 @@ train_cfg:
   output: Finder-train
   dataset: Finder
   encoder: DDN-M36
-  batch_size: 16
+  batch_size: 1 ###16
   LR: 0.0001
   weight_decay: 0.0005
   kl_weight: !!float 1e-2
@@ -25,4 +25,4 @@ train_cfg:
   mode: train
   note: default set of DDN, training on BSDS
   noise_rate: 0.3
-  loss_lmbda: 1.1
+  loss_lmbda: 1.1 ### > 1 more precision < 1 more recall

@@ -72,6 +72,11 @@ parser.add_argument("--cfg", required=True, default="config/BSDS-DDN_M36.yaml")
 
 parser.add_argument("--SAM", action="store_true", help="Using SAM to help extract feature")
 
+###
+parser.add_argument("--no_pretrained_caformer", action="store_true", default=False, required=False, help="If selected don't use weights of pre-trained transfomer")
+parser.add_argument("--save_images", action="store_true", default=False, required=False, help="If selected save images at train and val time")
+###
+
 args = parser.parse_args()
 
 args = update_args(args)
@@ -128,14 +133,20 @@ def main():
     
     ###
     elif args.dataset == "Finder":
+        try:
+            machine_name = os.getenv("MACHINE_NAME")
+        except:
+            machine_name = ""
         sys.path.append(os.path.abspath('../phase_discontinuities_detection'))
         from data_utils import utils
         from data_utils.dataloader import EdgeDataset
 
-        #train_data_path = "/home/andrea/Desktop/phase_discontinuities_detection/data/first_dates_train_val/v1/first_dataset/256_128_0/train"
-        #val_data_path = "/home/andrea/Desktop/phase_discontinuities_detection/data/first_dates_train_val/v1/first_dataset/256_128_0/val"
-        train_data_path = "/home/agatto/andrea/phase_discontinuities_detection/data/first_dates_train_val/v1/first_dataset/256_128_0/train"
-        val_data_path = "/home/agatto/andrea/phase_discontinuities_detection/data/first_dates_train_val/v1/first_dataset/256_128_0/val"
+        if machine_name == "LOCAL":
+            train_data_path = "/home/andrea/Desktop/phase_discontinuities_detection/data/first_dates_train_val/v1/first_dataset/256_128_0/train"
+            val_data_path = "/home/andrea/Desktop/phase_discontinuities_detection/data/first_dates_train_val/v1/first_dataset/256_128_0/val"
+        elif machine_name == "TREML1":
+            train_data_path = "/home/agatto/andrea/phase_discontinuities_detection/data/first_dates_train_val/v1/first_dataset/256_128_0/train"
+            val_data_path = "/home/agatto/andrea/phase_discontinuities_detection/data/first_dates_train_val/v1/first_dataset/256_128_0/val"
 
         train_data = utils.load_data_from_numpy(train_data_path)
         val_data = utils.load_data_from_numpy(val_data_path)
@@ -295,7 +306,7 @@ def train(train_loader, model, optimizer, epoch, save_dir, args):
         print(info)
         ###
 
-        if index_dataloader % (len(train_loader) // args.print_freq) == 0:
+        if index_dataloader % (len(train_loader) // args.print_freq) == 0 and args.save_images:
             ###
             '''info = 'Epoch: [{0}/{1}][{2}/{3}] '.format(epoch, args.maxepoch, index_dataloader, len(train_loader)) + \
                    'Time {batch_time.val:.2f} (avg:{batch_time.avg:.2f}) '.format(batch_time=batch_time) + \
@@ -353,36 +364,18 @@ def test(model, test_loader, epoch, save_dir, mg=False):
 
             outputs = torch.sigmoid(outputs)
             outputs = (outputs - outputs.min()) / (outputs.max() - outputs.min())
-            png = torch.squeeze(outputs.detach()).cpu().numpy()
-            _, _, H, W = image.shape
-            result = np.zeros((H + 1, W + 1))
-            result[1:, 1:] = png
-            # filename = splitext(test_list[idx])[0]
-            result_png = Image.fromarray((result * 255).astype(np.uint8))
-
-            png_save_dir = os.path.join(save_dir, "png")
-            ###mat_save_dir = os.path.join(save_dir, "mat")
-
-            if not os.path.exists(png_save_dir):
-                os.makedirs(png_save_dir)
-
-            ###if not os.path.exists(mat_save_dir):
-            ###    os.makedirs(mat_save_dir)
-            result_png.save(join(png_save_dir, "%s.png" % filename))
-            ###io.savemat(join(mat_save_dir, "%s.mat" % filename), {'result': result}, do_compression=True)
-        else:
-            for granu in [-5,-4.5,-4,-3.5,-3, -2.5, -2, -1.5, -1,-0.5, 0]:
-
-                outputs = torch.sigmoid(mean + std * granu)
-                outputs = (outputs - outputs.min()) / (outputs.max() - outputs.min())
+            
+            ###
+            if args.save_images:
                 png = torch.squeeze(outputs.detach()).cpu().numpy()
                 _, _, H, W = image.shape
                 result = np.zeros((H + 1, W + 1))
                 result[1:, 1:] = png
+                # filename = splitext(test_list[idx])[0]
                 result_png = Image.fromarray((result * 255).astype(np.uint8))
 
-                png_save_dir = os.path.join(save_dir, str(granu), "png")
-                ###mat_save_dir = os.path.join(save_dir, str(granu), "mat")
+                png_save_dir = os.path.join(save_dir, "png")
+                ###mat_save_dir = os.path.join(save_dir, "mat")
 
                 if not os.path.exists(png_save_dir):
                     os.makedirs(png_save_dir)
@@ -391,6 +384,32 @@ def test(model, test_loader, epoch, save_dir, mg=False):
                 ###    os.makedirs(mat_save_dir)
                 result_png.save(join(png_save_dir, "%s.png" % filename))
                 ###io.savemat(join(mat_save_dir, "%s.mat" % filename), {'result': result}, do_compression=True)
+            ###
+        else:
+            for granu in [-5,-4.5,-4,-3.5,-3, -2.5, -2, -1.5, -1,-0.5, 0]:
+
+                outputs = torch.sigmoid(mean + std * granu)
+                outputs = (outputs - outputs.min()) / (outputs.max() - outputs.min())
+                
+                ###
+                if args.save_images:
+                    png = torch.squeeze(outputs.detach()).cpu().numpy()
+                    _, _, H, W = image.shape
+                    result = np.zeros((H + 1, W + 1))
+                    result[1:, 1:] = png
+                    result_png = Image.fromarray((result * 255).astype(np.uint8))
+
+                    png_save_dir = os.path.join(save_dir, str(granu), "png")
+                    ###mat_save_dir = os.path.join(save_dir, str(granu), "mat")
+
+                    if not os.path.exists(png_save_dir):
+                        os.makedirs(png_save_dir)
+
+                    ###if not os.path.exists(mat_save_dir):
+                    ###    os.makedirs(mat_save_dir)
+                    result_png.save(join(png_save_dir, "%s.png" % filename))
+                    ###io.savemat(join(mat_save_dir, "%s.mat" % filename), {'result': result}, do_compression=True)
+                ###
 
 
 def multiscale_test(model, test_loader, epoch, save_dir):
@@ -420,22 +439,25 @@ def multiscale_test(model, test_loader, epoch, save_dir):
             multi_fuse += fuse
         multi_fuse = multi_fuse / len(scale)
 
-        result = np.zeros((H + 1, W + 1))
-        result[1:, 1:] = multi_fuse
-        # filename = splitext(test_list[idx])[0]
+        ###
+        if args.save_images:
+            result = np.zeros((H + 1, W + 1))
+            result[1:, 1:] = multi_fuse
+            # filename = splitext(test_list[idx])[0]
 
-        result_png = Image.fromarray((result * 255).astype(np.uint8))
+            result_png = Image.fromarray((result * 255).astype(np.uint8))
 
-        png_save_dir = os.path.join(save_dir, "png")
-        ###mat_save_dir = os.path.join(save_dir, "mat")
+            png_save_dir = os.path.join(save_dir, "png")
+            ###mat_save_dir = os.path.join(save_dir, "mat")
 
-        if not os.path.exists(png_save_dir):
-            os.makedirs(png_save_dir)
+            if not os.path.exists(png_save_dir):
+                os.makedirs(png_save_dir)
 
-        ###if not os.path.exists(mat_save_dir):
-        ###    os.makedirs(mat_save_dir)
-        result_png.save(join(png_save_dir, "%s.png" % filename))
-        ###io.savemat(join(mat_save_dir, "%s.mat" % filename), {'result': result}, do_compression=True)
+            ###if not os.path.exists(mat_save_dir):
+            ###    os.makedirs(mat_save_dir)
+            result_png.save(join(png_save_dir, "%s.png" % filename))
+            ###io.savemat(join(mat_save_dir, "%s.mat" % filename), {'result': result}, do_compression=True)
+        ###
 
 
 def multiscale_test_mg(model, test_loader, epoch, save_dir):
@@ -478,22 +500,25 @@ def multiscale_test_mg(model, test_loader, epoch, save_dir):
                 multi_fuse += fuse
             multi_fuse = multi_fuse / len(scale)
 
-            result = np.zeros((H + 1, W + 1))
-            result[1:, 1:] = multi_fuse
-            # filename = splitext(test_list[idx])[0]
+            ###
+            if args.save_images:
+                result = np.zeros((H + 1, W + 1))
+                result[1:, 1:] = multi_fuse
+                # filename = splitext(test_list[idx])[0]
 
-            result_png = Image.fromarray((result * 255).astype(np.uint8))
+                result_png = Image.fromarray((result * 255).astype(np.uint8))
 
-            png_save_dir = os.path.join(granu_dir, "png")
-            ###mat_save_dir = os.path.join(granu_dir, "mat")
+                png_save_dir = os.path.join(granu_dir, "png")
+                ###mat_save_dir = os.path.join(granu_dir, "mat")
 
-            if not os.path.exists(png_save_dir):
-                os.makedirs(png_save_dir)
+                if not os.path.exists(png_save_dir):
+                    os.makedirs(png_save_dir)
 
-            if not os.path.exists(mat_save_dir):
-                os.makedirs(mat_save_dir)
-            result_png.save(join(png_save_dir, "%s.png" % filename))
-            ###io.savemat(join(mat_save_dir, "%s.mat" % filename), {'result': result}, do_compression=True)
+                ###if not os.path.exists(mat_save_dir):
+                ###    os.makedirs(mat_save_dir)
+                result_png.save(join(png_save_dir, "%s.png" % filename))
+                ###io.savemat(join(mat_save_dir, "%s.mat" % filename), {'result': result}, do_compression=True)
+            ###
 
 
 if __name__ == '__main__':
