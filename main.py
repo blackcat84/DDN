@@ -73,8 +73,8 @@ parser.add_argument("--cfg", required=True, default="config/BSDS-DDN_M36.yaml")
 parser.add_argument("--SAM", action="store_true", help="Using SAM to help extract feature")
 
 ###
-parser.add_argument("--no_pretrained_caformer", action="store_true", default=False, required=False, help="If selected don't use weights of pre-trained transfomer")
-parser.add_argument("--save_images", action="store_true", default=False, required=False, help="If selected save images at train and val time")
+parser.add_argument("--no_pretrained_caformer", action="store_true", default=None, required=False, help="If selected don't use weights of pre-trained transfomer")
+parser.add_argument("--save_images", action="store_true", default=None, required=False, help="If selected save images at train and val time")
 ###
 
 args = parser.parse_args()

@@ -26,3 +26,5 @@ train_cfg:
   note: default set of DDN, training on BSDS
   noise_rate: 0.3
   loss_lmbda: 1.1 ### > 1 more precision < 1 more recall
+  no_pretrained_caformer: !!bool True
+  save_images: !!bool False

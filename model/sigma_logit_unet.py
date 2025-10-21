@@ -130,6 +130,7 @@ class UnetDecoder(nn.Module):
 def get_encoder(args):
     name = args.encoder
     use_pretrained = not args.no_pretrained_caformer ###
+    print("AAAAAA", use_pretrained)
     if "CAFORMER-M36" == name.upper():
         from model.caformer import caformer_m36_384_in21ft1k
         encoder = caformer_m36_384_in21ft1k(pretrained=use_pretrained) ###
