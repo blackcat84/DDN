@@ -19,11 +19,11 @@ import torchvision
 import matplotlib
 from tqdm import tqdm
 
-from data.data_loader_one_random_uncert import  BIPED_Loader, NYUD_Loader, \
+from .data.data_loader_one_random_uncert import  BIPED_Loader, NYUD_Loader, \
     BSDS_Loader, PASCAL_Loader #,BIPEDv2_Loader
 
 from torch.utils.data import DataLoader
-from utils import Logger, Averagvalue, save_checkpoint
+from .utils import Logger, Averagvalue, save_checkpoint
 from os.path import join, split, isdir, splitext, split, abspath, dirname
 import scipy.io as io
 from shutil import copyfile
@@ -31,81 +31,119 @@ import random
 import numpy
 import ssl
 import cv2
-from utils import get_model_parm_nums, cross_entropy_loss_RCF, update_args
+from .utils import get_model_parm_nums, cross_entropy_loss_RCF, update_args
+import importlib
 
 ssl._create_default_https_context = ssl._create_unverified_context
 from torch.distributions import Normal, Independent
 
 os.environ["CUDA_DEVICE_ORDER"] = "PCI_BUS_ID"  # see issue #152
-### default args
-parser = argparse.ArgumentParser(description='PyTorch Training')
-parser.add_argument('-b', '--batch_size', default=None, type=int, metavar='BT', help='batch size')
-parser.add_argument('--LR', default=None, type=float, help='initial learning rate')
-parser.add_argument('--weight_decay', default=None, type=float, help='default weight decay')
-parser.add_argument('--stepsize', default=None, type=int, metavar='SS', help='learning rate step size')
-parser.add_argument('--maxepoch', default=None, type=int, help='number of total epochs to run')
-parser.add_argument('--start_epoch', default=None, type=int, help='manual epoch number (useful on restarts)')
-parser.add_argument('--print_freq', '-p', default=None, type=int, help='print frequency (default: 50)')
 
-parser.add_argument('--dataset', help='root folder of dataset', default=None)
-parser.add_argument('--itersize', default=None, type=int, metavar='IS', help='iter size')
-parser.add_argument('--kl_weight', default=None, type=float, help='weight for kl norm loss')
-parser.add_argument('--sampling', default=None, type=int, help='sampling times in test')
-parser.add_argument('--loss_lmbda', default=None, type=float, help='hype-param of loss 1.1 for BSDS 1.3 for NYUD')
-parser.add_argument('--distribution', default=None, type=str, help='the output distribution')
-parser.add_argument('--encoder', default=None, type=str,
-                    choices=["DDN-M36", "DDN-S18", "VGG", "CAFORMER-M36", "CAFORMER-S18", "RESNET50", "RESNET101"])
-parser.add_argument('--model', default=None, type=str, help=' ')
-parser.add_argument('--mode', default=None, type=str)
-parser.add_argument('--note', default=None, type=str, help=' ')
-parser.add_argument("--resume", default=None)
-parser.add_argument("--noise_rate", default=None, type=float)
+def get_args():
+    ### default args
+    parser = argparse.ArgumentParser(description='PyTorch Training')
+    parser.add_argument('-b', '--batch_size', default=None, type=int, metavar='BT', help='batch size')
+    parser.add_argument('--LR', default=None, type=float, help='initial learning rate')
+    parser.add_argument('--weight_decay', default=None, type=float, help='default weight decay')
+    parser.add_argument('--stepsize', default=None, type=int, metavar='SS', help='learning rate step size')
+    parser.add_argument('--maxepoch', default=None, type=int, help='number of total epochs to run')
+    parser.add_argument('--start_epoch', default=None, type=int, help='manual epoch number (useful on restarts)')
+    parser.add_argument('--print_freq', '-p', default=None, type=int, help='print frequency (default: 50)')
 
-
-### suggested args
-parser.add_argument('--output', "-o", help='output folder', default=None)
-parser.add_argument('--gpu', "-g", default=None, type=str, help='GPU ID')
-### necessary args
-parser.add_argument("--mg", action="store_true", help="Multiple Granularity, only work during test")
-parser.add_argument("--ms", action="store_true", help="Multiple Scale, works on test set, and it will test after every epoch")
-parser.add_argument("--cfg", required=True, default="config/BSDS-DDN_M36.yaml")
-
-parser.add_argument("--SAM", action="store_true", help="Using SAM to help extract feature")
-
-###
-parser.add_argument("--no_pretrained_caformer", action="store_true", default=None, required=False, help="If selected don't use weights of pre-trained transfomer")
-parser.add_argument("--save_images", action="store_true", default=None, required=False, help="If selected save images at train and val time")
-###
-
-args = parser.parse_args()
-
-args = update_args(args)
-
-MODEL_NAME = args.model
-import importlib
-
-Model = importlib.import_module(MODEL_NAME)
-
-os.environ["CUDA_VISIBLE_DEVICES"] = args.gpu
-
-THIS_DIR = abspath(dirname(__file__))
-
-TMP_DIR = join(THIS_DIR, args.output)
-
-if not isdir(TMP_DIR):
-    os.makedirs(TMP_DIR)
-
-file_name = os.path.basename(__file__)
-
-random_seed = 555
-if random_seed > 0:
-    random.seed(random_seed)
-    torch.manual_seed(random_seed)
-    torch.cuda.manual_seed(random_seed)
-    numpy.random.seed(random_seed)
+    parser.add_argument('--dataset', help='root folder of dataset', default=None)
+    parser.add_argument('--itersize', default=None, type=int, metavar='IS', help='iter size')
+    parser.add_argument('--kl_weight', default=None, type=float, help='weight for kl norm loss')
+    parser.add_argument('--sampling', default=None, type=int, help='sampling times in test')
+    parser.add_argument('--loss_lmbda', default=None, type=float, help='hype-param of loss 1.1 for BSDS 1.3 for NYUD')
+    parser.add_argument('--distribution', default=None, type=str, help='the output distribution')
+    parser.add_argument('--encoder', default=None, type=str,
+                        choices=["DDN-M36", "DDN-S18", "VGG", "CAFORMER-M36", "CAFORMER-S18", "RESNET50", "RESNET101"])
+    parser.add_argument('--model', default=None, type=str, help=' ')
+    parser.add_argument('--mode', default=None, type=str)
+    parser.add_argument('--note', default=None, type=str, help=' ')
+    parser.add_argument("--resume", default=None)
+    parser.add_argument("--noise_rate", default=None, type=float)
 
 
-def step_lr_scheduler(optimizer, epoch, init_lr=args.LR, lr_decay_epoch=3):
+    ### suggested args
+    parser.add_argument('--output', "-o", help='output folder', default=None)
+    parser.add_argument('--gpu', "-g", default=None, type=str, help='GPU ID')
+    ### necessary args
+    parser.add_argument("--mg", action="store_true", help="Multiple Granularity, only work during test")
+    parser.add_argument("--ms", action="store_true", help="Multiple Scale, works on test set, and it will test after every epoch")
+    parser.add_argument("--cfg", required=False, default="configs/ddn_finder.yaml")
+
+    parser.add_argument("--SAM", action="store_true", help="Using SAM to help extract feature")
+
+    ###
+    parser.add_argument("--no_pretrained_caformer", action="store_true", default=None, required=False, help="If selected don't use weights of pre-trained transfomer")
+    parser.add_argument("--save_images", action="store_true", default=None, required=False, help="If selected save images at train and val time")
+    ###
+
+    args = parser.parse_args()
+
+    args = update_args(args)
+
+    return args
+
+def initialize(args):
+    os.environ["CUDA_VISIBLE_DEVICES"] = args.gpu
+
+    THIS_DIR = abspath(dirname(__file__))
+
+    TMP_DIR = join(THIS_DIR, args.output)
+
+    if not isdir(TMP_DIR):
+        os.makedirs(TMP_DIR)
+
+    file_name = os.path.basename(__file__)
+
+    random_seed = 555
+    if random_seed > 0:
+        random.seed(random_seed)
+        torch.manual_seed(random_seed)
+        torch.cuda.manual_seed(random_seed)
+        numpy.random.seed(random_seed)
+
+    return THIS_DIR, TMP_DIR, file_name
+
+
+def initialize_model(args):
+
+    Model = importlib.import_module(args.model)
+    model = Model.Mymodel(args).cuda()
+    return model
+
+def initialize_optimizer(model, args):
+
+    parameters = {'pretrained.weight': [], 'pretrained.bias': [],
+                  'nopretrained.weight': [], 'nopretrained.bias': []}
+
+    for pname, p in model.named_parameters():
+        if ("encoder.stages" in pname) or ("encoder.downsample_layers" in pname):
+            # p.requires_grad = False
+            if "weight" in pname:
+                parameters['pretrained.weight'].append(p)
+            else:
+                parameters['pretrained.bias'].append(p)
+
+        else:
+            if "weight" in pname:
+                parameters['nopretrained.weight'].append(p)
+            else:
+                parameters['nopretrained.bias'].append(p)
+
+    optimizer = torch.optim.Adam([
+        {'params': parameters['pretrained.weight'], 'lr': args.LR * 0.1, 'weight_decay': args.weight_decay},
+        {'params': parameters['pretrained.bias'], 'lr': args.LR * 2 * 0.1, 'weight_decay': 0.},
+        {'params': parameters['nopretrained.weight'], 'lr': args.LR * 1, 'weight_decay': args.weight_decay},
+        {'params': parameters['nopretrained.bias'], 'lr': args.LR * 2, 'weight_decay': 0.},
+    ], lr=args.LR, weight_decay=args.weight_decay)
+
+    return optimizer
+
+
+def step_lr_scheduler(optimizer, epoch, lr_decay_epoch=3):
     """Decay learning rate by a factor of 0.1 every lr_decay_epoch epochs."""
 
     if (epoch > 0) and (epoch % lr_decay_epoch == 0):
@@ -116,6 +154,8 @@ def step_lr_scheduler(optimizer, epoch, init_lr=args.LR, lr_decay_epoch=3):
 
 
 def main():
+    args = get_args()
+    THIS_DIR, TMP_DIR, file_name = initialize()
     args.cuda = True
     if args.dataset == "BSDS":
         train_dataset = BSDS_Loader(root=args.cfg["data_pth"], split="train")
@@ -170,31 +210,9 @@ def main():
 
     # model
 
-    model = Model.Mymodel(args).cuda()
+    model = initialize_model(args)
 
-    parameters = {'pretrained.weight': [], 'pretrained.bias': [],
-                  'nopretrained.weight': [], 'nopretrained.bias': []}
-
-    for pname, p in model.named_parameters():
-        if ("encoder.stages" in pname) or ("encoder.downsample_layers" in pname):
-            # p.requires_grad = False
-            if "weight" in pname:
-                parameters['pretrained.weight'].append(p)
-            else:
-                parameters['pretrained.bias'].append(p)
-
-        else:
-            if "weight" in pname:
-                parameters['nopretrained.weight'].append(p)
-            else:
-                parameters['nopretrained.bias'].append(p)
-
-    optimizer = torch.optim.Adam([
-        {'params': parameters['pretrained.weight'], 'lr': args.LR * 0.1, 'weight_decay': args.weight_decay},
-        {'params': parameters['pretrained.bias'], 'lr': args.LR * 2 * 0.1, 'weight_decay': 0.},
-        {'params': parameters['nopretrained.weight'], 'lr': args.LR * 1, 'weight_decay': args.weight_decay},
-        {'params': parameters['nopretrained.bias'], 'lr': args.LR * 2, 'weight_decay': 0.},
-    ], lr=args.LR, weight_decay=args.weight_decay)
+    optimizer = initialize_optimizer(model, args)
     # optimizer = torch.optim.Adam(model.parameters(), lr=args.LR, weight_decay=args.weight_decay)
 
     log = Logger(join(TMP_DIR, '%s-%d-log.txt' % ('Adam', args.LR)))
@@ -236,10 +254,44 @@ def main():
               save_dir=join(TMP_DIR, 'epoch-%d-training-record' % epoch),
               args=args)
 
-        test(model, test_loader, epoch=epoch, save_dir=join(TMP_DIR, 'epoch-%d-testing-record-view' % epoch))
+        test(model, test_loader, epoch=epoch, args=args, save_dir=join(TMP_DIR, 'epoch-%d-testing-record-view' % epoch))
         if "BSDS" in args.dataset and args.ms:
             multiscale_test(model, test_loader, epoch=epoch, save_dir=join(TMP_DIR, 'epoch-%d-testing-record' % epoch))
         log.flush()  # write log
+
+
+def compute_losses(outputs, label, mean, std, args, ada=1):
+
+    bce_loss, mask = cross_entropy_loss_RCF(outputs, label, ada, args.loss_lmbda)
+
+    var = torch.pow(std, 2)
+
+    kl_reg_loss = args.kl_weight * 0.5 * torch.sum(torch.pow(mean, 2) + var - 1.0 - torch.log(var))
+    
+    loss = bce_loss + kl_reg_loss
+
+    return loss, bce_loss, kl_reg_loss, mask
+
+
+def train_batch(model, optimizer, losses, image, label, args, counter=0):
+    
+    mean, std = model(image)
+
+    counter += 1
+
+    outputs_dist = Independent(Normal(loc=mean, scale=std + 0.001), 1)
+    logits = outputs_dist.rsample()
+    outputs = torch.sigmoid(logits)
+    loss, bce_loss, kl_reg_loss, mask = compute_losses(outputs, label, mean, std, args, ada=1)
+
+    loss.backward()
+    if counter == args.itersize:
+        optimizer.step()
+        optimizer.zero_grad()
+        counter = 0
+    losses.update(loss, image.size(0))
+
+    return outputs, logits, loss, bce_loss, kl_reg_loss, mean, std, counter
 
 
 def train(train_loader, model, optimizer, epoch, save_dir, args):
@@ -270,27 +322,8 @@ def train(train_loader, model, optimizer, epoch, save_dir, args):
         data_time.update(time.time() - end)
         image, label = image.cuda(), label.cuda()
 
-        mean, std = model(image)
+        outputs, _, loss, bce_loss, kl_reg_loss, mean, std, counter = train_batch(model, optimizer, losses, image, label, args, counter)
 
-        counter += 1
-        ada = 1
-
-        outputs_dist = Independent(Normal(loc=mean, scale=std + 0.001), 1)
-        outputs = torch.sigmoid(outputs_dist.rsample())
-
-        bce_loss, mask = cross_entropy_loss_RCF(outputs, label, ada, args.loss_lmbda)
-
-        var = torch.pow(std, 2)
-        kl_reg_loss = 0.5 * torch.sum(torch.pow(mean, 2) + var - 1.0 - torch.log(var))
-        # 1e-2
-        loss = bce_loss + args.kl_weight * kl_reg_loss
-
-        loss.backward()
-        if counter == args.itersize:
-            optimizer.step()
-            optimizer.zero_grad()
-            counter = 0
-        losses.update(loss, image.size(0))
         epoch_loss.append(loss)
         batch_time.update(time.time() - end)
         end = time.time()
@@ -337,7 +370,28 @@ def train(train_loader, model, optimizer, epoch, save_dir, args):
     }, filename=join(save_dir, "epoch-%d-checkpoint.pth" % epoch))
 
 
-def test(model, test_loader, epoch, save_dir, mg=False):
+def test_batch(model, image, args, multi_granularity=False, granu=0):
+
+    with torch.no_grad():
+        mean, std = model(image)
+
+    if not multi_granularity:
+        outputs_dist = Independent(Normal(loc=mean, scale=std + 0.001), 1)
+        outputs = [outputs_dist.rsample() for _ in range(args.sampling)]
+        outputs = torch.cat(outputs, dim=1).mean(dim=1, keepdim=True)
+        logits = outputs.clone()
+        outputs = torch.sigmoid(outputs)
+        outputs = (outputs - outputs.min()) / (outputs.max() - outputs.min())
+
+    else:
+        logits = mean + std * granu
+        outputs = torch.sigmoid(logits)
+        outputs = (outputs - outputs.min()) / (outputs.max() - outputs.min())
+
+    return outputs, logits, mean, std
+
+
+def test(model, test_loader, epoch, args, save_dir, mg=False):
     print(save_dir)
     model.eval()
     if not isdir(save_dir):
@@ -348,22 +402,14 @@ def test(model, test_loader, epoch, save_dir, mg=False):
         ###
         tensors_to_concatenate = [data[key] for key in ["amplitude", "wphases", "edges"]]
         image = torch.cat(tensors_to_concatenate, dim=1)
-        label = data["edges"]
+        #label = data["edges"]
         filename = "out_"+str(idx)
         ###
 
         image = image.cuda()
-        
-        with torch.no_grad():
-            mean, std = model(image)
 
         if not mg:
-            outputs_dist = Independent(Normal(loc=mean, scale=std + 0.001), 1)
-            outputs = [outputs_dist.rsample() for _ in range(args.sampling)]
-            outputs = torch.cat(outputs, dim=1).mean(dim=1, keepdim=True)
-
-            outputs = torch.sigmoid(outputs)
-            outputs = (outputs - outputs.min()) / (outputs.max() - outputs.min())
+            outputs, _ = test_batch(model, image, args, multi_granularity=False)
             
             ###
             if args.save_images:
@@ -388,8 +434,7 @@ def test(model, test_loader, epoch, save_dir, mg=False):
         else:
             for granu in [-5,-4.5,-4,-3.5,-3, -2.5, -2, -1.5, -1,-0.5, 0]:
 
-                outputs = torch.sigmoid(mean + std * granu)
-                outputs = (outputs - outputs.min()) / (outputs.max() - outputs.min())
+                outputs, _ = test_batch(model, image, args, multi_granularity=True, granu=granu)
                 
                 ###
                 if args.save_images:
